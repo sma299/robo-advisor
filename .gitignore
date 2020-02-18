@@ -1,6 +1,8 @@
 # .gitignore file
 .DS_Store 
 .env
+#just an example if using google apis
+#auth/google_credentials.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
