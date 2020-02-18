@@ -1,0 +1,4 @@
+# packages that this project requires
+
+requests
+python-dotenv
