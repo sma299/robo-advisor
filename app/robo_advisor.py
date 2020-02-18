@@ -4,7 +4,7 @@
 import requests
 import json
 import os
-from .dotenv import load_dotenv
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -20,6 +20,11 @@ print(type(response))
 print(dir(response))
 print(response.status_code)
 print(response.text)
+
+#
+if "Error Message" in response.text:
+    print("OOPS couldn't find that symbol, please try again")
+    exit()
 
 print(type(response.text))
 parsed_response = json.loads(response.text)

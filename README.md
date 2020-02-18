@@ -1,5 +1,8 @@
 # robo-advisor
 
+## Prerequisites
+
+
 ### Environment Setup
 Create and activate a new Anaconda virtual environment:
 sh
