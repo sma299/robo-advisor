@@ -18,36 +18,27 @@ request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&sym
 print("URL:", request_url)
 
 response = requests.get(request_url)
-print(type(response))
-
-print(dir(response))
-print(response.status_code)
-print(response.text)
 
 # if symbol or API key is wrong
-if "Error Message" in response.text:
-    print("OOPS couldn't find that symbol, please try again")
-    exit()
+#if "Error Message" in response.text:
+   # print("OOPS couldn't find that symbol, please try again")
+    #exit()
 
 parsed_response = json.loads(response.text)
+
+#how to get latest day, latest close, recent high and low
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
-latest_close = parsed_response["Meta Data"]["Time Series (Daily)"]["2019-02-02"]["4. close"]
 
-print(type(parsed_response)) #> dict
+tsd = parsed_response["Time Series (Daily)"]
+dates = list(tsd.keys())
 
+latest_day = dates[0]
 
-
-
-
-
+latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
 
 
 
-
-
-
-
-
+# info output
 
 
 
