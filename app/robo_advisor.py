@@ -2,6 +2,7 @@
 
 # import my packages
 import requests
+import csv
 import json
 import os
 from dotenv import load_dotenv
@@ -59,7 +60,7 @@ recent_low = min(low_prices)
 
 
 print("-------------------------")
-print("SELECTED SYMBOL: XYZ")
+print("SELECTED SYMBOL: " + SYMBOL)
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
 print("REQUEST AT: 2018-02-20 02:00pm")
@@ -72,5 +73,14 @@ print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
+print("WRITING DATA TO CSV FILE...")
+print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+
+csv_file_path = "prices.csv" # a relative filepath
+
+with open(csv_file_path, "w") as csv_file: # "w" means open the file for writing
+    writer = csv.DictWriter(csv_file, fieldnames=["city", "name"])
+    writer.writeheader()
+    writer.writerow({"city": "New York", "name": "Yankees"})
