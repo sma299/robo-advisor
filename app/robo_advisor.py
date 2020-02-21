@@ -10,20 +10,24 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default="OOPS")
-SYMBOL = input("Please input a valid stock ticker")
+
+#get the input
+SYMBOL = input("Please input a valid stock ticker: ") #the resulting value is a string
+
 
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price) #get a USD value here
 
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={SYMBOL}&apikey={API_KEY}"
-print("URL:", request_url)
+#print("URL:", request_url)
 
 response = requests.get(request_url)
 
-# if symbol or API key is wrong
-# if "Error Message" in response.text:
-   # print("OOPS couldn't find that symbol, please try again")
-    #exit()
+#if symbol or API key is wrong
+if "Error Message" in response.text:
+    print("OOPS couldn't find that symbol, please try again")
+    exit()
+
 
 parsed_response = json.loads(response.text)
 
