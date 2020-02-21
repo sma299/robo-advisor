@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default="OOPS")
-SYMBOL = "TSLA" #todo: ask for a user input
+SYMBOL = input("Please input a valid stock ticker")
 
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price) #get a USD value here
@@ -97,7 +97,7 @@ print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
-print("WRITING DATA TO CSV: {csv_file_path}...")
+print(f"WRITING DATA TO CSV: {csv_file_path}")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
