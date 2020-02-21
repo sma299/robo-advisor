@@ -1,8 +1,5 @@
 # robo-advisor
 
-## Prerequisites
-
-
 ### Environment Setup
 Create and activate a new Anaconda virtual environment:
 sh
@@ -47,3 +44,22 @@ The system should prompt the user to input one stock or cryptocurrency symbol (e
 Before requesting data from the Internet, the system should first perform preliminary validations on user inputs. For example, it should ensure stock symbols are a reasonable amount of characters in length and not numeric in nature.
 If preliminary validations are not satisfied, the system should display a friendly error message like "Oh, expecting a properly-formed stock symbol like 'MSFT'. Please try again." and stop execution.
 Otherwise, if preliminary validations are satisfied, the system should proceed to issue a GET request to the [AlphaVantage API](https://www.alphavantage.co/documentation/) to…
+
+
+
+
+## Setup
+
+Before using or developing this application, take a moment to [obtain an AlphaVantage API Key](https://alphavantage.co/support/#api-key) (e.g. "abc123").
+
+
+
+## Usage
+ 
+Run the recommendation script:
+
+```py
+python app/robo_advisor.py
+```
+
+## [License](/LICENSE.md)
