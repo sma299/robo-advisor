@@ -118,7 +118,7 @@ print("-------------------------")
 #If the stock's latest closing price is less than 20% above its recent low, "Buy", else "Don't Buy".
 
 #here is the calculation
-difference = (int(latest_close) - int(recent_low))/int(recent_low)
+difference = (float(latest_close) - float(recent_low))/float(recent_low)
 difference_floor = .20
 
 if(difference < difference_floor):
