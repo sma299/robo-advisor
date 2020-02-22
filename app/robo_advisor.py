@@ -5,6 +5,7 @@ import requests
 import csv
 import json
 import os
+import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -96,7 +97,7 @@ with open(csv_file_path, "w") as csv_file: # "w" means open the file for writing
             })
 
 
-# info output
+#info output
 print("-------------------------")
 print("SELECTED SYMBOL: " + SYMBOL)
 print("-------------------------")
@@ -116,8 +117,16 @@ print("-------------------------")
 #One simple example algorithm would be (in pseudocode):
 #If the stock's latest closing price is less than 20% above its recent low, "Buy", else "Don't Buy".
 
-print("RECOMMENDATION: BUY!")
-print("RECOMMENDATION REASON: TODO")
+#here is the calculation
+difference = (int(latest_close) - int(recent_low))/int(recent_low)
+difference_floor = .20
+
+if(difference < difference_floor):
+    print("RECOMMENDATION: DO NOT BUY!")
+    print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS LESS THAN 20% HIGHER THAN THE RECENT CLOSE.")
+else:
+    print("RECOMMENDATION: BUY!")
+    print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS MORE THAN 20% HIGHER THAN THE RECENT CLOSE.")
 print("-------------------------")
 print(f"WRITING DATA TO CSV: {csv_file_path}")
 print("-------------------------")
