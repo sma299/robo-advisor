@@ -121,12 +121,13 @@ print("-------------------------")
 difference = (float(latest_close) - float(recent_low))/float(recent_low)
 difference_floor = .20
 
-if(difference < difference_floor):
+
+if(difference > difference_floor):
     print("RECOMMENDATION: DO NOT BUY!")
-    print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS LESS THAN 20% HIGHER THAN THE RECENT CLOSE.")
+    print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS MORE THAN 20% HIGHER THAN ITS RECENT LOW.")
 else:
     print("RECOMMENDATION: BUY!")
-    print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS MORE THAN 20% HIGHER THAN THE RECENT CLOSE.")
+    print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS LESS THAN 20% HIGHER THAN ITS RECENT LOW.")
 print("-------------------------")
 print(f"WRITING DATA TO CSV: {csv_file_path}")
 print("-------------------------")
