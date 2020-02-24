@@ -23,7 +23,7 @@ if len(SYMBOL) > 4 or len(SYMBOL) < 1:
     print("Your stock ticker symbol must be between 1-4 characters!")
     exit()
 
-#figure out if the variable has integers in it
+#figure out if the variable is an integer
 try:
     int_variable = int(SYMBOL)
     has_errors = True
@@ -80,10 +80,9 @@ csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.cs
 
 csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
 
-with open(csv_file_path, "w") as csv_file: # "w" means open the file for writing
+with open(csv_file_path, "w", newline='') as csv_file: # "w" means open the file for writing
     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
     writer.writeheader()
-
     #create a loop and write an entry for each day
     for date in dates:
         daily_prices = tsd[date]
@@ -133,5 +132,3 @@ print(f"WRITING DATA TO CSV: {csv_file_path}")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
-
-
