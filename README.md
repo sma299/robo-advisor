@@ -19,7 +19,7 @@ cd robo-advisor
 Use Anaconda to create and activate a new virtual environment, perhaps called "stocks-env". From inside the virtual environment, install package dependencies:
 
 ```sh
-pip install requests python-dotenv
+pip install requests python-dotenv matplotlib
 ```
 
 ## Setup

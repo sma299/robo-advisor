@@ -6,6 +6,7 @@ import csv
 import json
 import os
 import datetime
+import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -132,3 +133,10 @@ print(f"WRITING DATA TO CSV: {csv_file_path}")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+
+#now create a line graph with matplotlib
+plt.plot(dates, high_prices)
+plt.suptitle('High Prices of the Stock Over Days')
+plt.ylabel('price of the stock')
+plt.xlabel('days')
+plt.show()
