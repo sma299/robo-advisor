@@ -92,6 +92,10 @@ def test_to_usd():
     assert to_usd(123456.8) == "$123,456.80"
 
 def test_calculations():
-    def calculations(latest_close, recent_low):
-    difference = (float(latest_close) - float(recent_low))/float(recent_low)
-    return difference
+    # INVOCATION
+    latest_close = 6
+    recent_low = 5
+    result = calculations(latest_close, recent_low)
+    
+    # EXPECTATIONS
+    assert result == .20

@@ -66,7 +66,7 @@ def write_to_csv(rows, csv_filepath):
 
     csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
 
-    with open(csv_filepath, "w") as csv_file:
+    with open(csv_filepath, "w", newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
         writer.writeheader() # uses fieldnames set above
         for row in rows:
