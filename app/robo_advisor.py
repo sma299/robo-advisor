@@ -64,14 +64,29 @@ def write_to_csv(rows, csv_filepath):
 
     with open(csv_filepath, "w") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
-        writer.writeheader()
+        writer.writeheader() # uses fieldnames set above
         for row in rows:
             writer.writerow(row)
-
     return True
 
 
+"""
+create_graph function will create a line graph of the data using matplotlib
+"""
+def create_graph(dates, high_prices):
+    plt.plot(dates, high_prices)
+    plt.suptitle('High Prices of the Stock Over Days')
+    plt.ylabel('price of the stock')
+    plt.xlabel('days')
+    plt.show()
 
+"""
+the calculations function defines how the recommendation will be calculated
+"""
+def calculations(latest_close, recent_low):
+    #here is the calculation
+    difference = (float(latest_close) - float(recent_low))/float(recent_low)
+    difference_floor = .20
 
 # now I must put my if name = main conditional
 
@@ -139,25 +154,28 @@ if __name__ == "__main__":
     recent_low = min(low_prices)
 
     #best way to get a CSV file path
-    csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
 
-    csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
+    csv_filepath = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
 
-    with open(csv_file_path, "w", newline='') as csv_file: # "w" means open the file for writing
-        writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
-        writer.writeheader()
-        #create a loop and write an entry for each day
-        for date in dates:
-            daily_prices = tsd[date]
-            writer.writerow({
-                "timestamp": date,
-                "open": daily_prices["1. open"],
-                "high": daily_prices["2. high"],
-                "low": daily_prices["3. low"],
-                "close": daily_prices["4. close"],
-                "volume": daily_prices["5. volume"]
-                })
+    write_to_csv(dates, csv_filepath)
 
+    # csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
+# 
+    # with open(csv_file_path, "w", newline='') as csv_file: # "w" means open the file for writing
+    #     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+    #     writer.writeheader()
+    #     #create a loop and write an entry for each day
+    #     for date in dates:
+    #         daily_prices = tsd[date]
+    #         writer.writerow({
+    #             "timestamp": date,
+    #             "open": daily_prices["1. open"],
+    #             "high": daily_prices["2. high"],
+    #             "low": daily_prices["3. low"],
+    #             "close": daily_prices["4. close"],
+    #             "volume": daily_prices["5. volume"]
+    #             })
+# 
 
     #info output
     print("-------------------------")
@@ -196,9 +214,4 @@ if __name__ == "__main__":
     print("HAPPY INVESTING!")
     print("-------------------------")
 
-    #now create a line graph with matplotlib
-    plt.plot(dates, high_prices)
-    plt.suptitle('High Prices of the Stock Over Days')
-    plt.ylabel('price of the stock')
-    plt.xlabel('days')
-    plt.show()
+    create_graph(dates, high_prices)
