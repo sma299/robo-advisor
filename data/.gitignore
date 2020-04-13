@@ -7,3 +7,6 @@
 
 # except this gitignore file:
 !.gitignore
+
+# I think prof wants me to ignore the csv file
+prices.csv
