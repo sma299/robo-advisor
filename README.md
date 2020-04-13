@@ -35,4 +35,16 @@ Run the recommendation script:
 python app/robo_advisor.py
 ```
 
+## Tests
+
+Install pytest package (first time only):
+``` sh
+pip install pytest
+```
+
+Run tests:
+```sh
+pytest --disable-pytest-warnings
+```
+
 ## [License](/LICENSE.md)
