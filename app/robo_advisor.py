@@ -27,16 +27,19 @@ compile_url function tests to ensure the function accepts a stock symbol input p
 def compile_url(symbol):
     request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={API_KEY}"
     response = requests.get(request_url)
+    #if symbol or API key is wrong
+    if "Error Message" in response.text:
+        print("Unfortunately, that stock ticker symbol does not exist in our database. Please try again.")
+        exit()
     parsed_response = json.loads(response.text)
     return parsed_response
 
 """
-get_response function tests to ensure the function returns the expected response data in a usable format
-parsed_response should be a dictionary representing the original JSON response
-it should have keys: "Meta Data" and "Time Series Daily"
+transform_response function 
 """
-def get_response(parsed_response):
-
+def transform_response(parsed_response):
+    # parsed_response should be a dictionary representing the original JSON response
+    # it should have keys: "Meta Data" and "Time Series Daily"
     tsd = parsed_response["Time Series (Daily)"]
 
     rows = []
@@ -52,6 +55,7 @@ def get_response(parsed_response):
         rows.append(row)
 
     return rows
+
 
 """
 write_to_csv function writes the information to a csv file
@@ -69,12 +73,11 @@ def write_to_csv(rows, csv_filepath):
             writer.writerow(row)
     return True
 
-
 """
 create_graph function will create a line graph of the data using matplotlib
 """
-def create_graph(dates, high_prices):
-    plt.plot(dates, high_prices)
+def create_graph(high_prices):
+    plt.plot(high_prices)
     plt.suptitle('High Prices of the Stock Over Days')
     plt.ylabel('price of the stock')
     plt.xlabel('days')
@@ -84,17 +87,14 @@ def create_graph(dates, high_prices):
 the calculations function defines how the recommendation will be calculated
 """
 def calculations(latest_close, recent_low):
-    #here is the calculation
     difference = (float(latest_close) - float(recent_low))/float(recent_low)
-    difference_floor = .20
+    return difference
+
+
 
 # now I must put my if name = main conditional
 
 if __name__ == "__main__":
-
-
-    #for error checking
-    has_errors = False
 
     #get the input
     SYMBOL = input("Please input a valid stock ticker: ") #the resulting value is a string
@@ -104,7 +104,9 @@ if __name__ == "__main__":
         print("Your stock ticker symbol must be between 1-4 characters!")
         exit()
 
-    #figure out if the variable is an integer
+    #figure out if the variable is an integer for error checking
+    has_errors = False
+
     try:
         int_variable = int(SYMBOL)
         has_errors = True
@@ -113,69 +115,29 @@ if __name__ == "__main__":
     if has_errors == True:
         print("Stock ticker symbol cannot have integers in it!")
         exit()
-    
 
-    request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={SYMBOL}&apikey={API_KEY}"
-    #print("URL:", request_url)
+    # I USE A FUNCTION HERE
+    parsed_response = compile_url(SYMBOL)
 
-    response = requests.get(request_url)
-
-    #if symbol or API key is wrong
-    if "Error Message" in response.text:
-        print("Unfortunately, that stock ticker symbol does not exist in our database. Please try again.")
-        exit()
-
-    parsed_response = json.loads(response.text)
-
-    #how to get latest day, latest close, recent high and low
+    # how to get latest day, latest close, recent high and low
     last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 
-    tsd = parsed_response["Time Series (Daily)"]
+    # I USE ANOTHER FUNCTION HERE
+    rows = transform_response(parsed_response)
 
-    #assumes first day is on top but consider sorting
-    dates = list(tsd.keys())
+    latest_close = rows[0]["close"]
+    high_prices = [row["high"] for row in rows] # list comprehension for mapping purposes!
+    low_prices = [row["low"] for row in rows] # list comprehension for mapping purposes!
 
-    latest_day = dates[0]
-
-    latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
 
     #get the high and low price from each day using min and max
-    high_prices = []
-    low_prices = []
-
-    for date in dates:
-        high_price = tsd[date]["2. high"]
-        high_prices.append(float(high_price))
-        low_price = tsd[date]["3. low"]
-        low_prices.append(float(low_price))
-
-    #maximum of all of the high prices
     recent_high = max(high_prices)
     recent_low = min(low_prices)
 
     #best way to get a CSV file path
 
     csv_filepath = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
-
-    write_to_csv(dates, csv_filepath)
-
-    # csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
-# 
-    # with open(csv_file_path, "w", newline='') as csv_file: # "w" means open the file for writing
-    #     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
-    #     writer.writeheader()
-    #     #create a loop and write an entry for each day
-    #     for date in dates:
-    #         daily_prices = tsd[date]
-    #         writer.writerow({
-    #             "timestamp": date,
-    #             "open": daily_prices["1. open"],
-    #             "high": daily_prices["2. high"],
-    #             "low": daily_prices["3. low"],
-    #             "close": daily_prices["4. close"],
-    #             "volume": daily_prices["5. volume"]
-    #             })
-# 
+    write_to_csv(rows, csv_filepath)
 
     #info output
     print("-------------------------")
@@ -198,20 +160,18 @@ if __name__ == "__main__":
     #If the stock's latest closing price is less than 20% above its recent low, "Buy", else "Don't Buy".
 
     #here is the calculation
-    difference = (float(latest_close) - float(recent_low))/float(recent_low)
     difference_floor = .20
 
-
-    if(difference > difference_floor):
+    if(calculations(latest_close, recent_low) > difference_floor):
         print("RECOMMENDATION: DO NOT BUY!")
         print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS MORE THAN 20% HIGHER THAN ITS RECENT LOW.")
     else:
         print("RECOMMENDATION: BUY!")
         print("RECOMMENDATION REASON: THE LATEST CLOSE OF THIS STOCK PRICE IS LESS THAN 20% HIGHER THAN ITS RECENT LOW.")
     print("-------------------------")
-    print(f"WRITING DATA TO CSV: {csv_file_path}")
+    print(f"WRITING DATA TO CSV: {csv_filepath}")
     print("-------------------------")
     print("HAPPY INVESTING!")
     print("-------------------------")
 
-    create_graph(dates, high_prices)
+    create_graph(high_prices)
