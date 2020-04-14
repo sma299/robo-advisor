@@ -15,16 +15,26 @@ API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default="OOPS")
 
 # this is where I will put my functions!
 
-"""
-to_usd function formats number in standard USD-formatted strings (ex. $500,000.99)
-"""
+
 def to_usd(amount):
+    """
+    WHAT IT DOES: this function turns a number into US Dollar notation
+
+    PARAMETERS: passes in a number
+
+    RETURNS: a USD-formatted string (ex. $5,350.99)
+    """
     return "${0:,.2f}".format(amount)
 
-"""
-compile_url function tests to ensure the function accepts a stock symbol input parameter, and constructs the expected request url.
-"""
+
 def compile_url(symbol):
+    """
+    WHAT IT DOES: accepts a stock symbol and constructs the expected request url and uploads the JSON response
+
+    PARAMETERS: passes in a string, preferably an existing stock symbol on the NYSE
+
+    RETURNS: a dictionary representing the JSON response from the website
+    """
     request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={API_KEY}"
     response = requests.get(request_url)
     #if symbol or API key is wrong
@@ -34,12 +44,16 @@ def compile_url(symbol):
     parsed_response = json.loads(response.text)
     return parsed_response
 
-"""
-transform_response function 
-"""
+
 def transform_response(parsed_response):
-    # parsed_response should be a dictionary representing the original JSON response
-    # it should have keys: "Meta Data" and "Time Series Daily"
+    """
+    WHAT IT DOES: takes in the JSON stock information and breaks it up based on the Daily Time Series key
+
+    PARAMETERS: passes in the original JSON response from the website (see compile_url), should have keys "Meta Data" and "Time Series Daily"
+
+    RETURNS: a list of dictionaries called rows
+    """
+
     tsd = parsed_response["Time Series (Daily)"]
 
     rows = []
@@ -57,36 +71,49 @@ def transform_response(parsed_response):
     return rows
 
 
-"""
-write_to_csv function writes the information to a csv file
-rows should be a list of dictionaries
-csv_filepath should be a string filepath pointing to where the data should be written
-"""
+
 def write_to_csv(rows, csv_filepath):
+    """
+    WHAT IT DOES: writes stock information to a csv file
+
+    PARAMETERS: list of dictionaries, the filepath to the CSV file
+
+    RETURNS: boolean value to show that it executed correctly
+    """
 
     csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
 
-    with open(csv_filepath, "w") as csv_file:
+    with open(csv_filepath, "w", newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
         writer.writeheader() # uses fieldnames set above
         for row in rows:
             writer.writerow(row)
     return True
 
-"""
-create_graph function will create a line graph of the data using matplotlib
-"""
+
 def create_graph(high_prices):
+    """
+    WHAT IT DOES: uses matlibplot to create a graph with all of the high prices from the stock input by the user
+
+    PARAMETERS: a list of the high prices from the stock
+
+    RETURNS: boolean value to show that it executed correctly
+    """
     plt.plot(high_prices)
     plt.suptitle('High Prices of the Stock Over Days')
     plt.ylabel('price of the stock')
     plt.xlabel('days')
     plt.show()
+    return True
 
-"""
-the calculations function defines how the recommendation will be calculated
-"""
 def calculations(latest_close, recent_low):
+    """
+    WHAT IT DOES: calculates whether the stock should be bought or not
+
+    PARAMETERS: the latest close price and the minimum price of the stock over the last 100 days
+
+    RETURNS: float of the percent difference between the two parameters
+    """
     difference = (float(latest_close) - float(recent_low))/float(recent_low)
     return difference
 
