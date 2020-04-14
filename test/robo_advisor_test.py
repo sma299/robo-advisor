@@ -10,7 +10,7 @@ CI_ENV = os.environ.get("CI") == "true" # expect default environment variable se
 def test_compile_url():
     symbol = "NFLX"
 
-    parsed_response = get_response(symbol)
+    parsed_response = compile_url(symbol)
 
     assert isinstance(parsed_response, dict)
     assert "Meta Data" in parsed_response.keys()
