@@ -35,7 +35,9 @@ def compile_url(symbol):
     return parsed_response
 
 """
-transform_response function 
+transform_response function that returns a dictionary called rows     
+parsed_response should be a dictionary representing the original JSON response
+it should have keys: "Meta Data" and "Time Series Daily"
 """
 def transform_response(parsed_response):
     # parsed_response should be a dictionary representing the original JSON response
